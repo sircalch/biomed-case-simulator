@@ -82,6 +82,14 @@ Sin variables, se usa memoria del proceso (ephemeral).
 
 Schema sugerido: `supabase/schema.sql`
 
+### Seguridad de rutas internas
+
+La ruta `/about` esta protegida con HTTP Basic Auth en `proxy.ts`.
+
+- `INTERNAL_ROUTE_USER`
+- `INTERNAL_ROUTE_PASSWORD`
+- `NEXT_PUBLIC_SHOW_INTERNAL_NAV` (opcional, `true` para mostrar link interno en el menu)
+
 ### Ejecutar local
 
 ```bash

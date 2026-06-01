@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BarChart3, CircleHelp, FolderKanban, FlaskConical } from "lucide-react";
+import { BarChart3, FolderKanban, FlaskConical } from "lucide-react";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 const DONATION_URL = process.env.NEXT_PUBLIC_DONATION_URL ?? "";
+const SHOW_INTERNAL_NAV = process.env.NEXT_PUBLIC_SHOW_INTERNAL_NAV === "true";
 
 export default function RootLayout({
   children,
@@ -72,13 +73,14 @@ export default function RootLayout({
                 <BarChart3 className="h-4 w-4" aria-hidden="true" />
                 Resultados
               </Link>
-              <Link
-                href="/about"
-                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-slate-700 hover:border-cyan-200 hover:bg-cyan-50"
-              >
-                <CircleHelp className="h-4 w-4" aria-hidden="true" />
-                Acerca
-              </Link>
+              {SHOW_INTERNAL_NAV ? (
+                <Link
+                  href="/about"
+                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-slate-700 hover:border-cyan-200 hover:bg-cyan-50"
+                >
+                  Acerca
+                </Link>
+              ) : null}
             </nav>
           </div>
         </header>
