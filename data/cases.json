@@ -1,0 +1,537 @@
+[
+  {
+    "id": "monitor-sin-spo2",
+    "title": "Monitor sin lectura de SpO2",
+    "equipment": "Monitor multiparametrico",
+    "difficulty": "Basico",
+    "estimatedMinutes": 8,
+    "initialReport": "En terapia intermedia, el monitor muestra ECG y NIBP normales, pero la SpO2 permanece en 0 con mensaje de senal inestable.",
+    "clues": [
+      "El sensor se observa con cable torcido cerca del conector.",
+      "El puerto del modulo SpO2 tiene residuos y polvo.",
+      "Al conectar un sensor nuevo, la lectura aparece de forma intermitente."
+    ],
+    "questionSets": {
+      "cause": {
+        "prompt": "Cual es la causa mas probable del fallo principal?",
+        "options": [
+          {
+            "id": "cause-a",
+            "label": "Sensor o cable de SpO2 danado.",
+            "explanation": "Coincide con la falla intermitente y el dano visible en el cable."
+          },
+          {
+            "id": "cause-b",
+            "label": "Bateria interna en bajo voltaje.",
+            "explanation": "No explica porque solo falla SpO2 y el resto de parametros sigue estable."
+          },
+          {
+            "id": "cause-c",
+            "label": "Modulo ECG descalibrado.",
+            "explanation": "ECG funciona normal, por lo que no es la ruta de causa principal."
+          }
+        ]
+      },
+      "tool": {
+        "prompt": "Que herramienta o recurso confirma mejor la hipotesis?",
+        "options": [
+          {
+            "id": "tool-a",
+            "label": "Simulador de SpO2 y sensor de reemplazo probado.",
+            "explanation": "Permite verificar cadena completa de senal y descartar paciente/fisiologia."
+          },
+          {
+            "id": "tool-b",
+            "label": "Manometro de presion para NIBP.",
+            "explanation": "No aporta evidencia sobre el canal de SpO2."
+          },
+          {
+            "id": "tool-c",
+            "label": "Luxometro ambiental.",
+            "explanation": "No es herramienta de diagnostico para este tipo de falla."
+          }
+        ]
+      },
+      "action": {
+        "prompt": "Cual accion es la mas adecuada para resolver y dejar registro tecnico?",
+        "options": [
+          {
+            "id": "action-a",
+            "label": "Reemplazar sensor danado, limpiar conector y ejecutar prueba funcional.",
+            "explanation": "Resuelve la causa, verifica funcionamiento y deja evidencia de cierre."
+          },
+          {
+            "id": "action-b",
+            "label": "Reiniciar equipo y liberar al servicio sin prueba.",
+            "explanation": "No elimina causa raiz y deja riesgo de reincidencia."
+          },
+          {
+            "id": "action-c",
+            "label": "Cambiar modulo ECG para descartar conflicto.",
+            "explanation": "No corresponde al subsistema con falla."
+          }
+        ]
+      },
+      "context": {
+        "prompt": "Que dato contextual debe quedar en el reporte final?",
+        "options": [
+          {
+            "id": "context-a",
+            "label": "Numero de serie del sensor reemplazado y resultado de prueba SpO2.",
+            "explanation": "Aporta trazabilidad de refaccion y evidencia de restitucion operativa."
+          },
+          {
+            "id": "context-b",
+            "label": "Nombre completo de todos los pacientes del turno.",
+            "explanation": "No es necesario y puede exponer datos sensibles."
+          },
+          {
+            "id": "context-c",
+            "label": "Color del cuarto y ubicacion de camas vecinas.",
+            "explanation": "No agrega valor tecnico al evento."
+          }
+        ]
+      }
+    },
+    "correctAnswers": {
+      "cause": "cause-a",
+      "tool": "tool-a",
+      "action": "action-a",
+      "context": "context-a"
+    },
+    "finalResolution": "El equipo quedo operativo tras reemplazo de sensor y limpieza de conector. La prueba con simulador y paciente confirmo lectura estable de SpO2.",
+    "learningPoints": [
+      "No cerrar incidente sin prueba funcional posterior a la accion.",
+      "Registrar refacciones y evidencia de prueba mejora trazabilidad.",
+      "Separar sintomas por modulo evita cambios innecesarios."
+    ]
+  },
+  {
+    "id": "bomba-oclusion",
+    "title": "Bomba de infusion con alarma de oclusion",
+    "equipment": "Bomba volumetrica",
+    "difficulty": "Basico",
+    "estimatedMinutes": 9,
+    "initialReport": "En piso de hospitalizacion, una bomba activa alarma de oclusion en menos de 30 segundos despues de iniciar infusion con linea nueva.",
+    "clues": [
+      "El set de infusion presenta un doblez cerca de la puerta de la bomba.",
+      "La prueba con jeringa muestra resistencia alta en el tramo distal.",
+      "La bomba paso autoprueba interna al encender."
+    ],
+    "questionSets": {
+      "cause": {
+        "prompt": "Cual es la causa mas probable?",
+        "options": [
+          {
+            "id": "cause-a",
+            "label": "Obstruccion mecanica en linea de infusion.",
+            "explanation": "La resistencia alta y el doblez visible son consistentes con oclusion real."
+          },
+          {
+            "id": "cause-b",
+            "label": "Falla en altavoz de alarmas.",
+            "explanation": "El problema no es auditivo; existe condicion fisica de oclusion."
+          },
+          {
+            "id": "cause-c",
+            "label": "Error de red electrica del cuarto.",
+            "explanation": "No hay evidencia de falla de alimentacion en la bomba."
+          }
+        ]
+      },
+      "tool": {
+        "prompt": "Que recurso aporta mejor confirmacion?",
+        "options": [
+          {
+            "id": "tool-a",
+            "label": "Prueba de flujo con set nuevo y verificacion del tramo distal.",
+            "explanation": "Permite diferenciar si el bloqueo esta en set, via o pinzamiento."
+          },
+          {
+            "id": "tool-b",
+            "label": "Osciloscopio en la fuente de poder.",
+            "explanation": "No es la prioridad para un evento de oclusion fisica."
+          },
+          {
+            "id": "tool-c",
+            "label": "Termometro infrarrojo del motor.",
+            "explanation": "No ataca la sospecha principal del flujo bloqueado."
+          }
+        ]
+      },
+      "action": {
+        "prompt": "Que accion tecnica cierra mejor el caso?",
+        "options": [
+          {
+            "id": "action-a",
+            "label": "Corregir ruta de linea, retirar doblez y validar infusion continua.",
+            "explanation": "Resuelve condicion de oclusion y confirma estabilidad del sistema."
+          },
+          {
+            "id": "action-b",
+            "label": "Desactivar alarmas para evitar molestias.",
+            "explanation": "Es inseguro y no corrige causa."
+          },
+          {
+            "id": "action-c",
+            "label": "Cambiar bateria sin revisar linea.",
+            "explanation": "No existe evidencia de bateria como causa."
+          }
+        ]
+      },
+      "context": {
+        "prompt": "Que elemento documental es mas relevante?",
+        "options": [
+          {
+            "id": "context-a",
+            "label": "Configuracion de flujo, hora de evento y prueba posterior sin alarma.",
+            "explanation": "Documenta condiciones de falla y evidencia de solucion."
+          },
+          {
+            "id": "context-b",
+            "label": "Historial personal del operador.",
+            "explanation": "No es dato tecnico necesario para cierre."
+          },
+          {
+            "id": "context-c",
+            "label": "Lista de pacientes de otras camas.",
+            "explanation": "No aplica y puede comprometer privacidad."
+          }
+        ]
+      }
+    },
+    "correctAnswers": {
+      "cause": "cause-a",
+      "tool": "tool-a",
+      "action": "action-a",
+      "context": "context-a"
+    },
+    "finalResolution": "La alarma se elimino corrigiendo la ruta del set y retirando pinzamiento accidental. La bomba opero 15 minutos en prueba continua sin recurrencia.",
+    "learningPoints": [
+      "Antes de intervenir hardware, descartar obstrucciones fisicas de linea.",
+      "Registrar parametros de flujo ayuda a reproducir y validar el cierre.",
+      "Nunca anular alarmas como solucion de campo."
+    ]
+  },
+  {
+    "id": "desfibrilador-no-carga",
+    "title": "Desfibrilador no carga energia",
+    "equipment": "Desfibrilador bifasico",
+    "difficulty": "Intermedio",
+    "estimatedMinutes": 10,
+    "initialReport": "Durante verificacion matutina, el desfibrilador enciende pero no alcanza energia de prueba y cancela la carga a los pocos segundos.",
+    "clues": [
+      "El indicador de bateria muestra nivel bajo persistente.",
+      "Con alimentacion AC conectada, la carga mejora pero no completa.",
+      "El ultimo mantenimiento de bateria fue hace mas de 24 meses."
+    ],
+    "questionSets": {
+      "cause": {
+        "prompt": "Cual hipotesis inicial es mas fuerte?",
+        "options": [
+          {
+            "id": "cause-a",
+            "label": "Capacidad degradada de bateria y condicion de potencia limite.",
+            "explanation": "Los sintomas y antiguedad apuntan a degradacion de almacenamiento."
+          },
+          {
+            "id": "cause-b",
+            "label": "Gel de electrodos seco como causa primaria de no carga.",
+            "explanation": "Los parches afectan entrega, no la fase interna de carga."
+          },
+          {
+            "id": "cause-c",
+            "label": "Pantalla LCD con brillo defectuoso.",
+            "explanation": "No relaciona con imposibilidad de carga de energia."
+          }
+        ]
+      },
+      "tool": {
+        "prompt": "Que prueba da mejor evidencia tecnica?",
+        "options": [
+          {
+            "id": "tool-a",
+            "label": "Analizador de desfibrilador con rutina de carga/descarga y test de bateria.",
+            "explanation": "Mide desempeno energetico real y confirma capacidad residual."
+          },
+          {
+            "id": "tool-b",
+            "label": "Colorimetro de pantalla.",
+            "explanation": "No aporta al circuito de alta energia."
+          },
+          {
+            "id": "tool-c",
+            "label": "Bomba de vacio para succion.",
+            "explanation": "No corresponde al equipo ni a la falla descrita."
+          }
+        ]
+      },
+      "action": {
+        "prompt": "Cual accion es la respuesta tecnica correcta?",
+        "options": [
+          {
+            "id": "action-a",
+            "label": "Retirar de uso clinico, reemplazar bateria y validar carga nominal completa.",
+            "explanation": "Prioriza seguridad y verifica recuperacion del desempeno esperado."
+          },
+          {
+            "id": "action-b",
+            "label": "Mantener en servicio solo conectado a AC.",
+            "explanation": "No cumple criterio de disponibilidad segura en escenarios moviles."
+          },
+          {
+            "id": "action-c",
+            "label": "Aumentar energia objetivo para forzar carga.",
+            "explanation": "No corrige causa y puede elevar riesgo."
+          }
+        ]
+      },
+      "context": {
+        "prompt": "Que registro contextual es imprescindible?",
+        "options": [
+          {
+            "id": "context-a",
+            "label": "Tiempo de carga antes/despues, serial de bateria nueva y resultado del analizador.",
+            "explanation": "Documenta mejora objetiva y trazabilidad de componente critico."
+          },
+          {
+            "id": "context-b",
+            "label": "Marca de las sabanas del area.",
+            "explanation": "No tiene valor tecnico para el evento."
+          },
+          {
+            "id": "context-c",
+            "label": "Listado de turnos del personal administrativo.",
+            "explanation": "No agrega evidencia al reporte tecnico."
+          }
+        ]
+      }
+    },
+    "correctAnswers": {
+      "cause": "cause-a",
+      "tool": "tool-a",
+      "action": "action-a",
+      "context": "context-a"
+    },
+    "finalResolution": "El equipo se retiro temporalmente, se reemplazo bateria y se confirmo carga nominal en analizador con tiempos dentro de especificacion.",
+    "learningPoints": [
+      "En equipos de soporte vital, disponibilidad sin bateria funcional no es aceptable.",
+      "Usar analizador evita decisiones por percepcion subjetiva.",
+      "Trazabilidad de bateria es parte de auditoria tecnica y seguridad."
+    ]
+  },
+  {
+    "id": "incubadora-temp-inestable",
+    "title": "Incubadora con temperatura inestable",
+    "equipment": "Incubadora neonatal",
+    "difficulty": "Intermedio",
+    "estimatedMinutes": 10,
+    "initialReport": "En UCIN, la incubadora oscila entre 35.5 C y 37.8 C sin cambios manuales del setpoint durante la misma guardia.",
+    "clues": [
+      "Sensor de temperatura presenta lectura erratica al mover el cable.",
+      "Filtro de aire con suciedad acumulada en mas de 3 meses.",
+      "El ventilador interno genera ruido irregular."
+    ],
+    "questionSets": {
+      "cause": {
+        "prompt": "Cual es la causa tecnica principal mas probable?",
+        "options": [
+          {
+            "id": "cause-a",
+            "label": "Sensor de temperatura con conexion inestable.",
+            "explanation": "La variacion asociada al movimiento del cable sugiere falla intermitente del sensor."
+          },
+          {
+            "id": "cause-b",
+            "label": "Fallo en display de usuario.",
+            "explanation": "El display no explica variaciones reales del control termico."
+          },
+          {
+            "id": "cause-c",
+            "label": "Error en pedal de cama electrica cercana.",
+            "explanation": "No hay relacion directa con el lazo de control de incubadora."
+          }
+        ]
+      },
+      "tool": {
+        "prompt": "Que metodo de verificacion es el mas adecuado?",
+        "options": [
+          {
+            "id": "tool-a",
+            "label": "Termometro patron y prueba comparativa de estabilidad a setpoint fijo.",
+            "explanation": "Permite contrastar lectura interna contra referencia confiable."
+          },
+          {
+            "id": "tool-b",
+            "label": "Holter cardiaco.",
+            "explanation": "No aplica para diagnostico termico del equipo."
+          },
+          {
+            "id": "tool-c",
+            "label": "Balanza neonatal.",
+            "explanation": "No entrega evidencia sobre control de temperatura."
+          }
+        ]
+      },
+      "action": {
+        "prompt": "Cual accion corrige con mejor criterio tecnico?",
+        "options": [
+          {
+            "id": "action-a",
+            "label": "Sustituir sensor defectuoso, limpiar filtro y repetir prueba de estabilidad.",
+            "explanation": "Atiende causa probable y mejora condiciones de flujo termico."
+          },
+          {
+            "id": "action-b",
+            "label": "Subir setpoint para compensar oscilaciones.",
+            "explanation": "No elimina causa y puede generar sobrecalentamiento."
+          },
+          {
+            "id": "action-c",
+            "label": "Desactivar alarmas de temperatura.",
+            "explanation": "Incrementa riesgo y rompe barreras de seguridad."
+          }
+        ]
+      },
+      "context": {
+        "prompt": "Que informacion contextual fortalece el cierre?",
+        "options": [
+          {
+            "id": "context-a",
+            "label": "Grafica de temperatura antes/despues y fecha de cambio de filtro/sensor.",
+            "explanation": "Muestra impacto de la intervencion y facilita seguimiento preventivo."
+          },
+          {
+            "id": "context-b",
+            "label": "Color del uniforme del personal de turno.",
+            "explanation": "No es dato tecnico del incidente."
+          },
+          {
+            "id": "context-c",
+            "label": "Cantidad de sillas del area de espera.",
+            "explanation": "No contribuye al analisis de falla."
+          }
+        ]
+      }
+    },
+    "correctAnswers": {
+      "cause": "cause-a",
+      "tool": "tool-a",
+      "action": "action-a",
+      "context": "context-a"
+    },
+    "finalResolution": "Tras reemplazo de sensor y limpieza de filtro, la incubadora mantuvo setpoint estable por 30 minutos de prueba con referencia externa.",
+    "learningPoints": [
+      "Correlacionar lectura erratica con movimiento fisico ayuda a ubicar fallas intermitentes.",
+      "Pruebas comparativas con patron son clave en equipos termo sensibles.",
+      "Documentar evidencia de estabilidad previene reaperturas del caso."
+    ]
+  },
+  {
+    "id": "autoclave-sin-presion",
+    "title": "Autoclave no alcanza presion objetivo",
+    "equipment": "Autoclave de vapor",
+    "difficulty": "Intermedio",
+    "estimatedMinutes": 11,
+    "initialReport": "En central de esterilizacion, el ciclo termina en alarma porque la camara no supera la presion minima requerida para fase de esterilizacion.",
+    "clues": [
+      "Se detecta fuga leve en empaque de puerta durante fase de calentamiento.",
+      "El manometro sube lentamente y cae al estabilizar.",
+      "No hay evidencia de bloqueo en drenaje principal."
+    ],
+    "questionSets": {
+      "cause": {
+        "prompt": "Cual causa explica mejor el comportamiento observado?",
+        "options": [
+          {
+            "id": "cause-a",
+            "label": "Perdida de sello en puerta por desgaste de empaque.",
+            "explanation": "La fuga y caida de presion son consistentes con perdida de estanqueidad."
+          },
+          {
+            "id": "cause-b",
+            "label": "Error de reloj interno.",
+            "explanation": "No explica fuga fisica ni incapacidad de retener presion."
+          },
+          {
+            "id": "cause-c",
+            "label": "Falla en impresora de tickets.",
+            "explanation": "No influye en el circuito de vapor y presion."
+          }
+        ]
+      },
+      "tool": {
+        "prompt": "Que prueba o herramienta aporta validacion directa?",
+        "options": [
+          {
+            "id": "tool-a",
+            "label": "Prueba de fuga/estanqueidad y verificacion del empaque de puerta.",
+            "explanation": "Mide directamente si la camara retiene presion en condiciones controladas."
+          },
+          {
+            "id": "tool-b",
+            "label": "Electrocardiografo.",
+            "explanation": "No corresponde al tipo de equipo ni variable a evaluar."
+          },
+          {
+            "id": "tool-c",
+            "label": "Luxometro de sala.",
+            "explanation": "No tiene relacion con presion o vapor."
+          }
+        ]
+      },
+      "action": {
+        "prompt": "Que accion tecnica es la mas correcta?",
+        "options": [
+          {
+            "id": "action-a",
+            "label": "Reemplazar empaque, ajustar cierre y repetir ciclo de prueba completo.",
+            "explanation": "Atiende fuente de fuga y valida restablecimiento del proceso."
+          },
+          {
+            "id": "action-b",
+            "label": "Aumentar tiempo de ciclo sin reparar fuga.",
+            "explanation": "No corrige la perdida de presion y mantiene riesgo de esterilizacion incompleta."
+          },
+          {
+            "id": "action-c",
+            "label": "Desactivar alarma de fin de ciclo.",
+            "explanation": "Elimina barrera de seguridad y no corrige la causa."
+          }
+        ]
+      },
+      "context": {
+        "prompt": "Que evidencia contextual se debe registrar?",
+        "options": [
+          {
+            "id": "context-a",
+            "label": "Resultado de prueba de fuga y curva de presion del ciclo posterior.",
+            "explanation": "Acredita cumplimiento operativo tras la intervencion."
+          },
+          {
+            "id": "context-b",
+            "label": "Opinion verbal sin datos de prueba.",
+            "explanation": "No es suficiente para validar esterilizacion segura."
+          },
+          {
+            "id": "context-c",
+            "label": "Numero de personas en pasillo externo.",
+            "explanation": "No aporta a la trazabilidad tecnica."
+          }
+        ]
+      }
+    },
+    "correctAnswers": {
+      "cause": "cause-a",
+      "tool": "tool-a",
+      "action": "action-a",
+      "context": "context-a"
+    },
+    "finalResolution": "El reemplazo del empaque y ajuste de cierre eliminaron la fuga. El ciclo de validacion alcanzo presion y tiempos dentro de parametros esperados.",
+    "learningPoints": [
+      "En autoclaves, una fuga pequena puede impedir condiciones de esterilizacion.",
+      "Nunca sustituir reparacion por extension de ciclo sin evidencia.",
+      "Curva de presion posterior es parte esencial del cierre tecnico."
+    ]
+  }
+]
