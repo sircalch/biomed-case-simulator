@@ -96,11 +96,11 @@ export default function RootLayout({
                 Ingeniero Biomedico · Topic Tales Biomedica
               </p>
             </div>
-            <div className="rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
-                Apoya el proyecto
-              </p>
-              {DONATION_URL ? (
+            {DONATION_URL ? (
+              <div className="rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                  Apoya el proyecto
+                </p>
                 <a
                   href={DONATION_URL}
                   target="_blank"
@@ -109,10 +109,8 @@ export default function RootLayout({
                 >
                   Donar con PayPal
                 </a>
-              ) : (
-                <p className="mt-1 text-xs text-cyan-700">Donaciones pronto.</p>
-              )}
-            </div>
+              </div>
+            ) : null}
           </div>
         </footer>
       </body>
