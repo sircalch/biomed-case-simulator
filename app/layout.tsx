@@ -95,7 +95,7 @@ export default function RootLayout({
                 Ing. Andres Monreal
               </p>
               <p className="text-xs text-slate-600">
-                Ingeniero Biomedico · Topic Tales Biomedica
+                Ingeniero Biomedico / Topic Tales Biomedica
               </p>
             </div>
             {DONATION_URL ? (
