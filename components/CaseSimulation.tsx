@@ -1,6 +1,13 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, ChartColumnBig, SaveAll } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChartColumnBig,
+  RotateCcw,
+  SaveAll,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -31,6 +38,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     "idle" | "saving" | "synced" | "error"
   >("idle");
   const [runStorage, setRunStorage] = useState<"memory" | "supabase" | null>(null);
+  const [traineeAlias, setTraineeAlias] = useState("Invitado");
   const hasSubmittedResultRef = useRef(false);
   const [feedback, setFeedback] = useState<StepFeedback | null>({
     title: "Instruccion",
@@ -46,6 +54,18 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     () => evaluateCaseAnswers(scenario, answers),
     [scenario, answers],
   );
+
+  useEffect(() => {
+    const savedAlias = window.localStorage.getItem("biomed_case_trainee_alias");
+    if (!savedAlias) {
+      return;
+    }
+    setTraineeAlias(savedAlias);
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("biomed_case_trainee_alias", traineeAlias);
+  }, [traineeAlias]);
 
   useEffect(() => {
     if (currentStep.id !== "result") {
@@ -81,7 +101,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
             caseId: scenario.id,
             caseTitle: scenario.title,
             equipment: scenario.equipment,
-            traineeAlias: "Invitado",
+            traineeAlias: traineeAlias.trim() || "Invitado",
             score: evaluation.score,
             maxScore: evaluation.maxScore,
             correctCount: evaluation.correctCount,
@@ -158,6 +178,20 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
 
     setCurrentStepIndex((prev) => prev + 1);
     setFeedback(null);
+  };
+
+  const restartCase = () => {
+    hasSubmittedResultRef.current = false;
+    setCurrentStepIndex(0);
+    setAnswers(getInitialAnswerMap());
+    setRunSyncStatus("idle");
+    setRunStorage(null);
+    setFeedback({
+      title: "Instruccion",
+      message:
+        "Lee cada etapa antes de avanzar. En las preguntas, selecciona solo una opcion.",
+      tone: "info",
+    });
   };
 
   return (
@@ -293,6 +327,22 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
               Estado actual
             </h2>
+            <label className="mt-3 block text-sm text-slate-700">
+              Alias de participante
+              <span className="relative mt-1 block">
+                <User
+                  className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                  aria-hidden="true"
+                />
+                <input
+                  value={traineeAlias}
+                  onChange={(event) => setTraineeAlias(event.target.value)}
+                  maxLength={32}
+                  placeholder="Nombre o alias"
+                  className="w-full rounded-md border border-slate-300 bg-white py-2 pl-8 pr-3 text-sm text-slate-900"
+                />
+              </span>
+            </label>
             <p className="mt-2 text-sm text-slate-700">
               Paso {currentStepIndex + 1} de {SIMULATION_STEPS.length}:{" "}
               <span className="font-medium text-slate-900">
@@ -328,6 +378,14 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
                       : "Listo para registrar corrida."}
               </p>
             ) : null}
+            <button
+              type="button"
+              onClick={restartCase}
+              className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+            >
+              <RotateCcw className="h-4 w-4" aria-hidden="true" />
+              Reiniciar caso
+            </button>
           </section>
         </div>
       </div>
