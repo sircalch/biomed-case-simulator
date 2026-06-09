@@ -19,12 +19,33 @@ export const SIMULATION_STEPS: SimulationStep[] = [
 
 const scenarios = rawCases as CaseScenario[];
 
+const CATEGORY_TO_CASE_ID: Record<string, string> = {
+  "equipos-medicos": "monitor-sin-spo2",
+  "monitoreo-signos-vitales": "monitor-sin-spo2",
+  "bombas-infusion-terapia": "bomba-oclusion",
+  "desfibrilador-urgencias": "desfibrilador-no-carga",
+  "esterilizacion-autoclave": "autoclave-sin-presion",
+  "seguridad-electrica": "desfibrilador-no-carga",
+  "bioseguridad-basica": "bomba-oclusion",
+  "proteccion-radiologica-basica": "monitor-sin-spo2",
+  "ingenieria-clinica": "incubadora-temp-inestable",
+  "reportes-tecnicos-biomedicos": "monitor-sin-spo2",
+};
+
 export function getAllCases(): CaseScenario[] {
   return scenarios;
 }
 
 export function getCaseById(caseId: string): CaseScenario | undefined {
   return scenarios.find((caseItem) => caseItem.id === caseId);
+}
+
+export function getRecommendedCaseId(category: string | null | undefined): string | null {
+  if (!category) {
+    return null;
+  }
+  const caseId = CATEGORY_TO_CASE_ID[category];
+  return caseId && getCaseById(caseId) ? caseId : null;
 }
 
 export function getQuestionKeyForStep(

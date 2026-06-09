@@ -58,6 +58,22 @@ types/
 - Incubadora con temperatura inestable
 - Autoclave no alcanza presion
 
+### Integracion BioMedTools MX Core
+
+La raiz acepta `?category=<categoria>` desde Quiz Arena y redirige al caso recomendado.
+
+Ejemplos:
+
+- `/?category=monitoreo-signos-vitales` -> monitor sin lectura de SpO2
+- `/?category=bombas-infusion-terapia` -> bomba con alarma de oclusion
+- `/?category=desfibrilador-urgencias` -> desfibrilador no carga energia
+
+Al finalizar un caso, el resultado incluye enlace a Report Builder:
+
+```txt
+NEXT_PUBLIC_REPORT_BUILDER_URL?activity=case&caseId=<id>&equipment=<equipo>&score=<puntaje>
+```
+
 ### Scripts
 
 - `npm run dev` entorno local
@@ -79,6 +95,7 @@ Sin variables, se usa memoria del proceso (ephemeral).
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `SUPABASE_CASE_RUNS_TABLE` (opcional, default: `simulation_runs`)
+- `NEXT_PUBLIC_REPORT_BUILDER_URL` (opcional, default: `https://clinical-report-builder.vercel.app`)
 
 Schema sugerido: `supabase/schema.sql`
 

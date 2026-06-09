@@ -5,6 +5,10 @@ type FinalCaseReportProps = {
   evaluation: CaseEvaluation;
 };
 
+const REPORT_BUILDER_URL =
+  process.env.NEXT_PUBLIC_REPORT_BUILDER_URL ||
+  "https://clinical-report-builder.vercel.app";
+
 function verdictClass(verdict: CaseEvaluation["verdict"]) {
   if (verdict === "Excelente") {
     return "border-emerald-200 bg-emerald-50 text-emerald-800";
@@ -16,6 +20,12 @@ function verdictClass(verdict: CaseEvaluation["verdict"]) {
 }
 
 export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) {
+  const reportUrl = new URL(REPORT_BUILDER_URL);
+  reportUrl.searchParams.set("activity", "case");
+  reportUrl.searchParams.set("caseId", scenario.id);
+  reportUrl.searchParams.set("equipment", scenario.equipment);
+  reportUrl.searchParams.set("score", String(evaluation.score));
+
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -89,6 +99,15 @@ export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) 
           ))}
         </ul>
       </section>
+
+      <a
+        href={reportUrl.toString()}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-800"
+      >
+        Generar reporte tecnico
+      </a>
     </section>
   );
 }

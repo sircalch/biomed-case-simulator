@@ -1,7 +1,23 @@
 import { ArrowRight, BrainCircuit, ClipboardList, FlaskConical, Target } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+import { getRecommendedCaseId } from "@/lib/case-engine";
+
+type HomeProps = {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+};
+
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+  const recommendedCaseId = getRecommendedCaseId(params.category);
+
+  if (recommendedCaseId) {
+    redirect(`/cases/${recommendedCaseId}?source=quiz&category=${params.category}`);
+  }
+
   const highlights = [
     "5 casos tecnicos iniciales para practica guiada.",
     "Flujo por pasos: reporte, pistas, causa, herramienta, accion y cierre.",
