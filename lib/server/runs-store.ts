@@ -117,15 +117,58 @@ function normalizeRun(raw: unknown): SimulationRun | null {
 }
 
 function getSupabaseConfig() {
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const runsTable = process.env.SUPABASE_CASE_RUNS_TABLE ?? "simulation_runs";
+  const supabaseUrl = cleanEnvValue(process.env.SUPABASE_URL);
+  const serviceRoleKey = cleanEnvValue(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const runsTable =
+    cleanEnvValue(process.env.SUPABASE_CASE_RUNS_TABLE) ?? "simulation_runs";
 
   if (!supabaseUrl || !serviceRoleKey) {
     return null;
   }
 
   return { supabaseUrl, serviceRoleKey, runsTable };
+}
+
+function cleanEnvValue(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  const withoutBearer = trimmed.replace(/^Bearer\s+/i, "").trim();
+  const first = withoutBearer.at(0);
+  const last = withoutBearer.at(-1);
+
+  if (
+    withoutBearer.length >= 2 &&
+    ((first === '"' && last === '"') ||
+      (first === "'" && last === "'") ||
+      (first === "`" && last === "`"))
+  ) {
+    return withoutBearer.slice(1, -1).trim();
+  }
+
+  return withoutBearer;
+}
+
+function isJwtKey(value: string): boolean {
+  return value.split(".").length === 3;
+}
+
+function buildSupabaseHeaders(
+  serviceRoleKey: string,
+  extra?: Record<string, string>,
+): HeadersInit {
+  const headers: Record<string, string> = {
+    apikey: serviceRoleKey,
+    ...(extra ?? {}),
+  };
+
+  if (isJwtKey(serviceRoleKey)) {
+    headers.Authorization = `Bearer ${serviceRoleKey}`;
+  }
+
+  return headers;
 }
 
 async function listSupabaseRuns(limit: number): Promise<SimulationRun[] | null> {
@@ -142,10 +185,7 @@ async function listSupabaseRuns(limit: number): Promise<SimulationRun[] | null> 
 
     const response = await fetch(endpoint.toString(), {
       method: "GET",
-      headers: {
-        apikey: config.serviceRoleKey,
-        Authorization: `Bearer ${config.serviceRoleKey}`,
-      },
+      headers: buildSupabaseHeaders(config.serviceRoleKey),
       cache: "no-store",
     });
 
@@ -176,12 +216,10 @@ async function insertSupabaseRun(run: SimulationRun): Promise<boolean> {
     const endpoint = new URL(`/rest/v1/${config.runsTable}`, config.supabaseUrl);
     const response = await fetch(endpoint.toString(), {
       method: "POST",
-      headers: {
+      headers: buildSupabaseHeaders(config.serviceRoleKey, {
         "Content-Type": "application/json",
-        apikey: config.serviceRoleKey,
-        Authorization: `Bearer ${config.serviceRoleKey}`,
         Prefer: "return=minimal",
-      },
+      }),
       body: JSON.stringify([
         {
           external_id: run.id,
