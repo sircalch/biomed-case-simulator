@@ -93,7 +93,7 @@ Si defines estas variables, las corridas se guardan en Supabase.
 Sin variables, se usa memoria del proceso (ephemeral).
 
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (`sb_secret_...` recomendado para backend; tambien acepta `service_role` JWT legacy)
 - `SUPABASE_CASE_RUNS_TABLE` (opcional, default: `simulation_runs`)
 - `NEXT_PUBLIC_REPORT_BUILDER_URL` (opcional, default: `https://clinical-report-builder.vercel.app`)
 
