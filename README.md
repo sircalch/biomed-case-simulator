@@ -1,6 +1,6 @@
 ## BioMed Case Simulator Web
 
-MVP web para practicar resolucion de fallas de equipos medicos con flujo guiado por etapas.
+Aplicacion web para practicar resolucion de fallas de equipos medicos con flujo guiado por etapas.
 
 ### Stack
 

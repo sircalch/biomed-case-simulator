@@ -25,7 +25,6 @@ type SimulationStats = {
 
 export function SimulationStatsPanel() {
   const [stats, setStats] = useState<SimulationStats | null>(null);
-  const [source, setSource] = useState<"memory" | "supabase" | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
 
   const loadStats = async () => {
@@ -37,7 +36,6 @@ export function SimulationStatsPanel() {
       }
 
       const payload = (await response.json()) as {
-        source?: "memory" | "supabase";
         stats?: SimulationStats;
       };
 
@@ -46,12 +44,10 @@ export function SimulationStatsPanel() {
       }
 
       setStats(payload.stats);
-      setSource(payload.source ?? "memory");
       setStatus("idle");
     } catch {
       setStatus("error");
       setStats(null);
-      setSource(null);
     }
   };
 
@@ -148,14 +144,9 @@ export function SimulationStatsPanel() {
               </ul>
             )}
           </div>
-          <p className="text-xs uppercase tracking-wide text-slate-500">
-            Fuente de datos: {source ?? "N/D"}
+          <p className="text-xs text-slate-500">
+            Las metricas se actualizan con los intentos disponibles del entorno.
           </p>
-          {source === "memory" ? (
-            <p className="text-xs text-slate-600">
-              Modo memoria: en Vercel no garantiza persistencia entre invocaciones.
-            </p>
-          ) : null}
         </div>
       ) : null}
     </section>

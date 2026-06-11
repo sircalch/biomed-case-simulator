@@ -13,8 +13,8 @@ export default function AboutPage() {
             BioMed Case Simulator Web
           </h1>
           <p className="mt-4 text-slate-700">
-            Este MVP entrena razonamiento tecnico en incidentes de ingenieria
-            clinica mediante simulaciones por pasos.
+            Esta version inicial entrena razonamiento tecnico en incidentes de
+            ingenieria clinica mediante simulaciones por pasos.
           </p>
 
           <h2 className="mt-6 text-xl font-semibold text-slate-900">

@@ -56,11 +56,13 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
   );
 
   useEffect(() => {
-    const savedAlias = window.localStorage.getItem("biomed_case_trainee_alias");
-    if (!savedAlias) {
-      return;
-    }
-    setTraineeAlias(savedAlias);
+    const timer = window.setTimeout(() => {
+      const savedAlias = window.localStorage.getItem("biomed_case_trainee_alias");
+      if (savedAlias) {
+        setTraineeAlias(savedAlias);
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -129,7 +131,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     };
 
     void submitRun();
-  }, [currentStep.id, evaluation, scenario]);
+  }, [currentStep.id, evaluation, scenario, traineeAlias]);
 
   const canGoNext = questionKey ? Boolean(answers[questionKey]) : true;
   const isFirstStep = currentStepIndex === 0;
@@ -369,13 +371,13 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
               >
                 {runSyncStatus === "synced"
                   ? runStorage === "memory"
-                    ? "Corrida registrada en memoria temporal (no persistente en Vercel)."
-                    : "Corrida registrada en supabase."
+                    ? "Resultado guardado para esta sesion."
+                    : "Resultado registrado para seguimiento docente."
                   : runSyncStatus === "saving"
-                    ? "Guardando corrida en backend..."
+                    ? "Guardando resultado..."
                     : runSyncStatus === "error"
-                      ? "No se pudo registrar la corrida en backend."
-                      : "Listo para registrar corrida."}
+                      ? "El resultado esta disponible; no se pudo sincronizar."
+                      : "Listo para finalizar caso."}
               </p>
             ) : null}
             <button

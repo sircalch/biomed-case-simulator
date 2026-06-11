@@ -80,11 +80,11 @@ export default async function Home({ searchParams }: HomeProps) {
               Iniciar simulador
             </Link>
             <Link
-              href="/about"
+              href="/results"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
             >
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              Acerca del proyecto
+              Ver ultimo resultado
             </Link>
           </div>
           <section className="mt-7 rounded-md border border-slate-200 bg-slate-50 p-4">
