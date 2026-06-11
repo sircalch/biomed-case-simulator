@@ -5,7 +5,7 @@
     "equipment": "Monitor multiparametrico",
     "difficulty": "Basico",
     "estimatedMinutes": 8,
-    "initialReport": "En terapia intermedia, el monitor muestra ECG y NIBP normales, pero la SpO2 permanece en 0 con mensaje de senal inestable.",
+    "initialReport": "En un area simulada de terapia intermedia, el monitor muestra ECG y NIBP normales, pero la SpO2 permanece en 0 con mensaje de senal inestable.",
     "clues": [
       "El sensor se observa con cable torcido cerca del conector.",
       "El puerto del modulo SpO2 tiene residuos y polvo.",
@@ -38,7 +38,7 @@
           {
             "id": "tool-a",
             "label": "Simulador de SpO2 y sensor de reemplazo probado.",
-            "explanation": "Permite verificar cadena completa de senal y descartar paciente/fisiologia."
+            "explanation": "Permite verificar la cadena sensor-cable-modulo y diferenciar falla de accesorio/equipo frente a condiciones del sitio de medicion."
           },
           {
             "id": "tool-b",
@@ -99,7 +99,7 @@
       "action": "action-a",
       "context": "context-a"
     },
-    "finalResolution": "El equipo quedo operativo tras reemplazo de sensor y limpieza de conector. La prueba con simulador y paciente confirmo lectura estable de SpO2.",
+    "finalResolution": "El equipo quedo operativo en el escenario simulado tras reemplazo de sensor y limpieza de conector. La prueba con simulador de SpO2 confirmo senal estable.",
     "learningPoints": [
       "No cerrar incidente sin prueba funcional posterior a la accion.",
       "Registrar refacciones y evidencia de prueba mejora trazabilidad.",
