@@ -198,7 +198,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
 
   return (
     <div className="space-y-5">
-      <section className="rounded-md border border-slate-200 bg-white px-4 py-3">
+      <section className="rounded-lg border border-cyan-100 bg-white/95 px-4 py-3 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
             <ChartColumnBig className="h-4 w-4" aria-hidden="true" />
@@ -220,7 +220,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
       <StepProgress currentStep={currentStep.id} />
 
       <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-        <section className="rounded-md border border-slate-200 bg-white p-6">
+        <section className="rounded-lg border border-slate-200 bg-white/95 p-6 shadow-sm">
           <header className="mb-4">
             <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
               Caso interactivo
@@ -325,7 +325,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
 
         <div className="space-y-4 lg:sticky lg:top-4 lg:self-start">
           <EquipmentMiniCard scenario={scenario} />
-          <section className="rounded-lg border border-slate-200 bg-white p-4">
+          <section className="rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
               Estado actual
             </h2>
