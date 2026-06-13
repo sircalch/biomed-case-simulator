@@ -34,41 +34,27 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur">
-          <div className="bg-cyan-50/80">
-            <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 border-b border-cyan-100 px-4 py-2 md:px-6">
-              <p className="text-xs font-medium text-slate-700">
-                Flujo por etapas para diagnostico tecnico y retroalimentacion inmediata.
-              </p>
-              <Link
-                href="/cases"
-                className="inline-flex min-h-9 items-center gap-2 rounded-md bg-cyan-700 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-cyan-600"
-              >
-                <FlaskConical className="h-4 w-4" aria-hidden="true" />
-                Iniciar practica
-              </Link>
-            </div>
-          </div>
+        <header className="sticky top-0 z-40 border-b border-blue-800 bg-blue-950 text-white shadow-sm">
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">
+              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-200">
                 BioMed Tools MX
               </p>
-              <Link href="/" className="text-xl font-semibold text-slate-900">
+              <Link href="/" className="text-xl font-semibold text-white">
                 BioMed Case Simulator
               </Link>
             </div>
             <nav className="flex flex-wrap items-center gap-2 text-sm">
               <Link
                 href="/cases"
-                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-slate-700 hover:border-cyan-200 hover:bg-cyan-50"
+                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-blue-100 hover:bg-white/10 hover:text-white"
               >
                 <FolderKanban className="h-4 w-4" aria-hidden="true" />
                 Casos
               </Link>
               <Link
                 href="/results"
-                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-slate-700 hover:border-cyan-200 hover:bg-cyan-50"
+                className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-blue-100 hover:bg-white/10 hover:text-white"
               >
                 <BarChart3 className="h-4 w-4" aria-hidden="true" />
                 Resultados
@@ -76,11 +62,18 @@ export default function RootLayout({
               {SHOW_INTERNAL_NAV ? (
                 <Link
                   href="/about"
-                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-slate-700 hover:border-cyan-200 hover:bg-cyan-50"
+                  className="inline-flex min-h-10 items-center gap-2 rounded-md border border-transparent px-3 py-2 font-medium text-blue-100 hover:bg-white/10 hover:text-white"
                 >
                   Acerca
                 </Link>
               ) : null}
+              <Link
+                href="/cases"
+                className="inline-flex min-h-9 items-center gap-2 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-blue-950 transition hover:bg-blue-50"
+              >
+                <FlaskConical className="h-4 w-4" aria-hidden="true" />
+                Iniciar practica
+              </Link>
             </nav>
           </div>
         </header>
