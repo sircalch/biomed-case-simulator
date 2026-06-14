@@ -201,7 +201,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
   return (
     <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.12)]">
       <div className="grid lg:grid-cols-[15.5rem_1fr]">
-        <aside className="bg-blue-950 p-5 text-white">
+        <aside className="hidden bg-blue-950 p-5 text-white lg:block">
           <h2 className="text-sm font-semibold">BioMed Case Simulator</h2>
           <p className="mt-1 text-xs text-blue-200">Caso diagnostico</p>
 
