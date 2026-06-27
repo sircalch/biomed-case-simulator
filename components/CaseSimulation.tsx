@@ -6,6 +6,8 @@ import {
   BrainCircuit,
   ChartColumnBig,
   ClipboardList,
+  Download,
+  FileText,
   FlaskConical,
   RotateCcw,
   SaveAll,
@@ -20,7 +22,7 @@ import { FinalCaseReport } from "@/components/FinalCaseReport";
 import { OptionCard } from "@/components/OptionCard";
 import { SIMULATION_STEPS, getInitialAnswerMap } from "@/lib/case-engine";
 import { evaluateCaseAnswers } from "@/lib/scoring";
-import { saveLastResult } from "@/lib/storage";
+import { loadCaseNotes, saveCaseNotes, saveLastResult } from "@/lib/storage";
 import { CaseAnswerMap, CaseScenario } from "@/types/case";
 
 type CaseSimulationProps = {
@@ -33,6 +35,48 @@ type StepFeedback = {
   tone: "info" | "success" | "warning";
 };
 
+const CORE_URL =
+  process.env.NEXT_PUBLIC_CORE_URL ?? "https://biomedtools-mx-core.vercel.app";
+const QUIZ_ARENA_URL =
+  process.env.NEXT_PUBLIC_QUIZ_ARENA_URL ?? "https://biomed-quiz-arena.vercel.app";
+const REPORT_BUILDER_URL =
+  process.env.NEXT_PUBLIC_REPORT_BUILDER_URL ??
+  "https://clinical-report-builder.vercel.app";
+
+const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
+  "monitor-sin-spo2": "monitoreo-signos-vitales",
+  "bomba-oclusion": "bombas-infusion-terapia",
+  "desfibrilador-no-carga": "desfibrilador-urgencias",
+  "incubadora-temp-inestable": "equipos-medicos-basicos",
+  "autoclave-sin-presion": "esterilizacion-autoclave",
+};
+
+function buildExternalUrl(
+  base: string,
+  path = "/",
+  params?: Record<string, string>,
+) {
+  const url = new URL(path, base);
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value);
+    }
+  }
+  return url.toString();
+}
+
+function downloadJson(filename: string, payload: unknown) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json;charset=utf-8",
+  });
+  const href = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = href;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(href);
+}
+
 export function CaseSimulation({ scenario }: CaseSimulationProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [answers, setAnswers] = useState<CaseAnswerMap>(getInitialAnswerMap);
@@ -41,6 +85,8 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
   >("idle");
   const [runStorage, setRunStorage] = useState<"memory" | "supabase" | null>(null);
   const [traineeAlias, setTraineeAlias] = useState("Invitado");
+  const [quickNotes, setQuickNotes] = useState("");
+  const [notesLoaded, setNotesLoaded] = useState(false);
   const hasSubmittedResultRef = useRef(false);
   const [feedback, setFeedback] = useState<StepFeedback | null>({
     title: "Instruccion",
@@ -57,19 +103,51 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     [scenario, answers],
   );
 
+  const quizCategory = CASE_TO_QUIZ_CATEGORY[scenario.id] ?? "equipos-medicos";
+  const quizUrl = buildExternalUrl(QUIZ_ARENA_URL, `/quiz/${quizCategory}`, {
+    mode: "study",
+    difficulty: "all",
+  });
+  const reportUrl = buildExternalUrl(REPORT_BUILDER_URL, "/builder/corrective", {
+    activity: "case",
+    caseId: scenario.id,
+    caseTitle: scenario.title,
+    equipment: scenario.equipment,
+    score: String(evaluation.score),
+    maxScore: String(evaluation.maxScore),
+  });
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const savedAlias = window.localStorage.getItem("biomed_case_trainee_alias");
       if (savedAlias) {
         setTraineeAlias(savedAlias);
       }
+      setQuickNotes(loadCaseNotes(scenario.id));
+      setNotesLoaded(true);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [scenario.id]);
 
   useEffect(() => {
-    window.localStorage.setItem("biomed_case_trainee_alias", traineeAlias);
+    try {
+      window.localStorage.setItem("biomed_case_trainee_alias", traineeAlias);
+    } catch {
+      // Ignore unavailable localStorage in private or restricted contexts.
+    }
   }, [traineeAlias]);
+
+  useEffect(() => {
+    if (!notesLoaded) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      saveCaseNotes(scenario.id, quickNotes);
+    }, 400);
+
+    return () => window.clearTimeout(timer);
+  }, [notesLoaded, quickNotes, scenario.id]);
 
   useEffect(() => {
     if (currentStep.id !== "result") {
@@ -88,6 +166,8 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
       caseTitle: scenario.title,
       equipment: scenario.equipment,
       completedAt,
+      traineeAlias: traineeAlias.trim() || "Invitado",
+      notes: quickNotes.trim(),
       evaluation,
     });
 
@@ -133,7 +213,7 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     };
 
     void submitRun();
-  }, [currentStep.id, evaluation, scenario, traineeAlias]);
+  }, [currentStep.id, evaluation, quickNotes, scenario, traineeAlias]);
 
   const canGoNext = questionKey ? Boolean(answers[questionKey]) : true;
   const isFirstStep = currentStepIndex === 0;
@@ -195,6 +275,26 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
       message:
         "Lee cada etapa antes de avanzar. En las preguntas, selecciona solo una opcion.",
       tone: "info",
+    });
+  };
+
+  const exportCaseEvidence = () => {
+    downloadJson(`biomed-case-${scenario.id}.json`, {
+      exportedAt: new Date().toISOString(),
+      source: "BioMed Case Simulator",
+      case: {
+        id: scenario.id,
+        title: scenario.title,
+        equipment: scenario.equipment,
+        difficulty: scenario.difficulty,
+      },
+      traineeAlias: traineeAlias.trim() || "Invitado",
+      currentStep: currentStep.id,
+      notes: quickNotes.trim(),
+      answers,
+      evaluation,
+      educationalNotice:
+        "Evidencia educativa. No sustituye protocolos institucionales ni mantenimiento certificado.",
     });
   };
 
@@ -448,9 +548,14 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
                   Notas rapidas
                 </h2>
                 <textarea
+                  value={quickNotes}
+                  onChange={(event) => setQuickNotes(event.target.value)}
                   placeholder="Escribe tus observaciones..."
                   className="mt-3 min-h-20 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
                 />
+                <p className="mt-2 text-xs text-slate-500">
+                  Se guardan localmente por caso en este navegador.
+                </p>
               </section>
 
               <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -505,6 +610,43 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
                   <RotateCcw className="h-4 w-4" aria-hidden="true" />
                   Reiniciar caso
                 </button>
+                <div className="mt-3 grid gap-2">
+                  <a
+                    href={quizUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-semibold text-blue-800 transition hover:bg-blue-100"
+                  >
+                    <BrainCircuit className="h-4 w-4" aria-hidden="true" />
+                    Repasar quiz
+                  </a>
+                  <a
+                    href={reportUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-teal-200 bg-teal-50 px-3 py-1.5 text-sm font-semibold text-teal-800 transition hover:bg-teal-100"
+                  >
+                    <FileText className="h-4 w-4" aria-hidden="true" />
+                    Reporte tecnico
+                  </a>
+                  <a
+                    href={`${CORE_URL}/ruta`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                  >
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    Volver a ruta Core
+                  </a>
+                  <button
+                    type="button"
+                    onClick={exportCaseEvidence}
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md bg-cyan-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-cyan-800"
+                  >
+                    <Download className="h-4 w-4" aria-hidden="true" />
+                    Exportar evidencia
+                  </button>
+                </div>
               </section>
             </aside>
           </div>

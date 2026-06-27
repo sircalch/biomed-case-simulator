@@ -1,3 +1,5 @@
+import { ArrowRight, BookOpenCheck, FileText } from "lucide-react";
+
 import { CaseEvaluation, CaseScenario } from "@/types/case";
 
 type FinalCaseReportProps = {
@@ -8,6 +10,32 @@ type FinalCaseReportProps = {
 const REPORT_BUILDER_URL =
   process.env.NEXT_PUBLIC_REPORT_BUILDER_URL ||
   "https://clinical-report-builder.vercel.app";
+const QUIZ_ARENA_URL =
+  process.env.NEXT_PUBLIC_QUIZ_ARENA_URL || "https://biomed-quiz-arena.vercel.app";
+const CORE_URL =
+  process.env.NEXT_PUBLIC_CORE_URL || "https://biomedtools-mx-core.vercel.app";
+
+const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
+  "monitor-sin-spo2": "monitoreo-signos-vitales",
+  "bomba-oclusion": "bombas-infusion-terapia",
+  "desfibrilador-no-carga": "desfibrilador-urgencias",
+  "incubadora-temp-inestable": "equipos-medicos-basicos",
+  "autoclave-sin-presion": "esterilizacion-autoclave",
+};
+
+function buildExternalUrl(
+  base: string,
+  path = "/",
+  params?: Record<string, string>,
+) {
+  const url = new URL(path, base);
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.set(key, value);
+    }
+  }
+  return url.toString();
+}
 
 function verdictClass(verdict: CaseEvaluation["verdict"]) {
   if (verdict === "Excelente") {
@@ -20,13 +48,19 @@ function verdictClass(verdict: CaseEvaluation["verdict"]) {
 }
 
 export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) {
-  const reportUrl = new URL(REPORT_BUILDER_URL);
-  reportUrl.searchParams.set("activity", "case");
-  reportUrl.searchParams.set("caseId", scenario.id);
-  reportUrl.searchParams.set("caseTitle", scenario.title);
-  reportUrl.searchParams.set("equipment", scenario.equipment);
-  reportUrl.searchParams.set("score", String(evaluation.score));
-  reportUrl.searchParams.set("maxScore", String(evaluation.maxScore));
+  const reportUrl = buildExternalUrl(REPORT_BUILDER_URL, "/builder/corrective", {
+    activity: "case",
+    caseId: scenario.id,
+    caseTitle: scenario.title,
+    equipment: scenario.equipment,
+    score: String(evaluation.score),
+    maxScore: String(evaluation.maxScore),
+  });
+  const quizCategory = CASE_TO_QUIZ_CATEGORY[scenario.id] ?? "equipos-medicos";
+  const quizUrl = buildExternalUrl(QUIZ_ARENA_URL, `/quiz/${quizCategory}`, {
+    mode: "study",
+    difficulty: "all",
+  });
 
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-6">
@@ -102,14 +136,35 @@ export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) 
         </ul>
       </section>
 
-      <a
-        href={reportUrl.toString()}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-5 inline-flex min-h-10 items-center justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-800"
-      >
-        Generar reporte tecnico del caso
-      </a>
+      <div className="mt-5 grid gap-2 sm:grid-cols-3">
+        <a
+          href={reportUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-blue-700 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-800"
+        >
+          <FileText className="h-4 w-4" aria-hidden="true" />
+          Generar reporte
+        </a>
+        <a
+          href={quizUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800 transition hover:bg-blue-100"
+        >
+          <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
+          Reforzar quiz
+        </a>
+        <a
+          href={`${CORE_URL}/ruta`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+        >
+          Volver al Core
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </div>
     </section>
   );
 }

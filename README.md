@@ -8,7 +8,7 @@ Aplicacion web para practicar resolucion de fallas de equipos medicos con flujo 
 - TypeScript
 - Tailwind CSS
 - JSON local para escenarios
-- localStorage para guardar ultimo resultado
+- localStorage para guardar ultimo resultado, historial local y notas por caso
 - API interna para corridas y telemetria
 
 ### Estructura principal
@@ -29,6 +29,7 @@ components/
   FinalCaseReport.tsx
   EquipmentMiniCard.tsx
   LatestResultClient.tsx
+  CaseHistoryClient.tsx
 data/
   cases.json
 lib/
@@ -49,6 +50,7 @@ types/
 6. Elegir accion.
 7. Responder pregunta contextual.
 8. Revisar resultado final con puntaje y feedback.
+9. Exportar evidencia JSON o registrar reporte tecnico.
 
 ### Casos incluidos
 
@@ -71,8 +73,18 @@ Ejemplos:
 Al finalizar un caso, el resultado incluye enlace a Report Builder:
 
 ```txt
-NEXT_PUBLIC_REPORT_BUILDER_URL?activity=case&caseId=<id>&equipment=<equipo>&score=<puntaje>
+NEXT_PUBLIC_REPORT_BUILDER_URL/builder/corrective?activity=case&caseId=<id>&equipment=<equipo>&score=<puntaje>
 ```
+
+### Evidencia local
+
+La pantalla `/results` permite:
+
+- ver ultimo resultado guardado
+- revisar historial local de intentos
+- exportar historial en JSON o CSV
+- conservar notas por caso
+- repetir un caso desde el historial
 
 ### Scripts
 
@@ -95,6 +107,8 @@ Sin variables, se usa memoria del proceso (ephemeral).
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY` (`sb_secret_...` recomendado para backend; tambien acepta `service_role` JWT legacy)
 - `SUPABASE_CASE_RUNS_TABLE` (opcional, default: `simulation_runs`)
+- `NEXT_PUBLIC_CORE_URL` (opcional, default: `https://biomedtools-mx-core.vercel.app`)
+- `NEXT_PUBLIC_QUIZ_ARENA_URL` (opcional, default: `https://biomed-quiz-arena.vercel.app`)
 - `NEXT_PUBLIC_REPORT_BUILDER_URL` (opcional, default: `https://clinical-report-builder.vercel.app`)
 
 Schema sugerido: `supabase/schema.sql`

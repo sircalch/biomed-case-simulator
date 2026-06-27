@@ -75,5 +75,7 @@ export type StoredCaseResult = {
   caseTitle: string;
   equipment: string;
   completedAt: string;
+  traineeAlias?: string;
+  notes?: string;
   evaluation: CaseEvaluation;
 };

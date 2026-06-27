@@ -26,9 +26,11 @@ const CATEGORY_TO_CASE_ID: Record<string, string> = {
   "desfibrilador-urgencias": "desfibrilador-no-carga",
   "esterilizacion-autoclave": "autoclave-sin-presion",
   "seguridad-electrica": "desfibrilador-no-carga",
+  "seguridad-electrica-hospitalaria": "desfibrilador-no-carga",
   "bioseguridad-basica": "bomba-oclusion",
   "proteccion-radiologica-basica": "monitor-sin-spo2",
   "ingenieria-clinica": "incubadora-temp-inestable",
+  "ingenieria-clinica-mantenimiento": "incubadora-temp-inestable",
   "reportes-tecnicos-biomedicos": "monitor-sin-spo2",
 };
 
