@@ -20,10 +20,52 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://biomed-case-simulator.vercel.app";
+const OG_IMAGE = "/biomed-equipment-atlas.png";
+
 export const metadata: Metadata = {
-  title: "BioMed Case Simulator Web",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "BioMed Case Simulator",
+    template: "%s | BioMed Case Simulator",
+  },
   description:
     "Simulador web de casos tecnicos para practicar diagnostico de fallas en equipos medicos.",
+  applicationName: "BioMed Case Simulator",
+  authors: [{ name: "Ing. Andres Monreal" }],
+  creator: "Ing. Andres Monreal / Topic Tales Biomedica",
+  keywords: [
+    "simulador biomedico",
+    "casos tecnicos",
+    "equipos medicos",
+    "diagnostico de fallas",
+    "ingenieria clinica",
+  ],
+  openGraph: {
+    title: "BioMed Case Simulator",
+    description:
+      "Casos simulados de fallas en equipos medicos para razonamiento tecnico y documentacion.",
+    url: SITE_URL,
+    siteName: "BioMedTools MX Core",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1600,
+        height: 1000,
+        alt: "Simulador de casos tecnicos para equipos medicos",
+      },
+    ],
+    locale: "es_MX",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BioMed Case Simulator",
+    description:
+      "Practica diagnostico tecnico de fallas en equipos medicos mediante casos guiados.",
+    images: [OG_IMAGE],
+  },
 };
 
 const DONATION_URL = process.env.NEXT_PUBLIC_DONATION_URL ?? "";
