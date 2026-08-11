@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpenCheck, FileText } from "lucide-react";
+import { ArrowRight, BookOpenCheck, Boxes, FileText } from "lucide-react";
 
 import { CaseEvaluation, CaseScenario } from "@/types/case";
 
@@ -14,6 +14,9 @@ const QUIZ_ARENA_URL =
   process.env.NEXT_PUBLIC_QUIZ_ARENA_URL || "https://biomed-quiz-arena.vercel.app";
 const CORE_URL =
   process.env.NEXT_PUBLIC_CORE_URL || "https://biomedtools-mx-core.vercel.app";
+const BIOMED_3D_LAB_URL =
+  process.env.NEXT_PUBLIC_BIOMED_3D_LAB_URL ||
+  "https://biomed-3d-engineering-lab.vercel.app";
 
 const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
   "monitor-sin-spo2": "monitoreo-signos-vitales",
@@ -21,6 +24,14 @@ const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
   "desfibrilador-no-carga": "desfibrilador-urgencias",
   "incubadora-temp-inestable": "equipos-medicos-basicos",
   "autoclave-sin-presion": "esterilizacion-autoclave",
+};
+
+const CASE_TO_3D_EQUIPMENT: Record<string, string> = {
+  "monitor-sin-spo2": "patient-monitor",
+  "bomba-oclusion": "infusion-pump",
+  "desfibrilador-no-carga": "defibrillator",
+  "incubadora-temp-inestable": "neonatal-incubator",
+  "autoclave-sin-presion": "autoclave",
 };
 
 function buildExternalUrl(
@@ -60,6 +71,10 @@ export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) 
   const quizUrl = buildExternalUrl(QUIZ_ARENA_URL, `/quiz/${quizCategory}`, {
     mode: "study",
     difficulty: "all",
+  });
+  const labUrl = buildExternalUrl(BIOMED_3D_LAB_URL, "/", {
+    equipment: CASE_TO_3D_EQUIPMENT[scenario.id] ?? scenario.equipment,
+    caseCategory: scenario.id,
   });
 
   return (
@@ -136,7 +151,7 @@ export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) 
         </ul>
       </section>
 
-      <div className="mt-5 grid gap-2 sm:grid-cols-3">
+      <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <a
           href={reportUrl}
           target="_blank"
@@ -154,6 +169,15 @@ export function FinalCaseReport({ scenario, evaluation }: FinalCaseReportProps) 
         >
           <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
           Reforzar quiz
+        </a>
+        <a
+          href={labUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm font-medium text-cyan-900 transition hover:bg-cyan-100"
+        >
+          <Boxes className="h-4 w-4" aria-hidden="true" />
+          Ver equipo 3D
         </a>
         <a
           href={`${CORE_URL}/ruta`}

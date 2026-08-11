@@ -3,6 +3,7 @@
 import {
   ArrowLeft,
   ArrowRight,
+  Boxes,
   BrainCircuit,
   ChartColumnBig,
   ClipboardList,
@@ -42,6 +43,9 @@ const QUIZ_ARENA_URL =
 const REPORT_BUILDER_URL =
   process.env.NEXT_PUBLIC_REPORT_BUILDER_URL ??
   "https://clinical-report-builder.vercel.app";
+const BIOMED_3D_LAB_URL =
+  process.env.NEXT_PUBLIC_BIOMED_3D_LAB_URL ??
+  "https://biomed-3d-engineering-lab.vercel.app";
 
 const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
   "monitor-sin-spo2": "monitoreo-signos-vitales",
@@ -49,6 +53,14 @@ const CASE_TO_QUIZ_CATEGORY: Record<string, string> = {
   "desfibrilador-no-carga": "desfibrilador-urgencias",
   "incubadora-temp-inestable": "equipos-medicos-basicos",
   "autoclave-sin-presion": "esterilizacion-autoclave",
+};
+
+const CASE_TO_3D_EQUIPMENT: Record<string, string> = {
+  "monitor-sin-spo2": "patient-monitor",
+  "bomba-oclusion": "infusion-pump",
+  "desfibrilador-no-carga": "defibrillator",
+  "incubadora-temp-inestable": "neonatal-incubator",
+  "autoclave-sin-presion": "autoclave",
 };
 
 function buildExternalUrl(
@@ -115,6 +127,10 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
     equipment: scenario.equipment,
     score: String(evaluation.score),
     maxScore: String(evaluation.maxScore),
+  });
+  const labUrl = buildExternalUrl(BIOMED_3D_LAB_URL, "/", {
+    equipment: CASE_TO_3D_EQUIPMENT[scenario.id] ?? scenario.equipment,
+    caseCategory: scenario.id,
   });
 
   useEffect(() => {
@@ -611,6 +627,15 @@ export function CaseSimulation({ scenario }: CaseSimulationProps) {
                   Reiniciar caso
                 </button>
                 <div className="mt-3 grid gap-2">
+                  <a
+                    href={labUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-cyan-900 transition hover:bg-cyan-100"
+                  >
+                    <Boxes className="h-4 w-4" aria-hidden="true" />
+                    Explorar equipo 3D
+                  </a>
                   <a
                     href={quizUrl}
                     target="_blank"

@@ -76,6 +76,12 @@ Al finalizar un caso, el resultado incluye enlace a Report Builder:
 NEXT_PUBLIC_REPORT_BUILDER_URL/builder/corrective?activity=case&caseId=<id>&equipment=<equipo>&score=<puntaje>
 ```
 
+Durante el caso y al finalizarlo tambien se puede abrir el equipo relacionado en BioMed 3D Engineering Lab:
+
+```txt
+NEXT_PUBLIC_BIOMED_3D_LAB_URL?equipment=<equipo-3d>&caseCategory=<id>
+```
+
 ### Evidencia local
 
 La pantalla `/results` permite:
@@ -110,6 +116,7 @@ Sin variables, se usa memoria del proceso (ephemeral).
 - `NEXT_PUBLIC_CORE_URL` (opcional, default: `https://biomedtools-mx-core.vercel.app`)
 - `NEXT_PUBLIC_QUIZ_ARENA_URL` (opcional, default: `https://biomed-quiz-arena.vercel.app`)
 - `NEXT_PUBLIC_REPORT_BUILDER_URL` (opcional, default: `https://clinical-report-builder.vercel.app`)
+- `NEXT_PUBLIC_BIOMED_3D_LAB_URL` (opcional, default: `https://biomed-3d-engineering-lab.vercel.app`)
 - `NEXT_PUBLIC_SITE_URL` (opcional, usado para metadata publica)
 
 Schema sugerido: `supabase/schema.sql`
