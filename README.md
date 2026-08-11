@@ -113,6 +113,13 @@ Sin variables, se usa memoria del proceso (ephemeral).
 
 Schema sugerido: `supabase/schema.sql`
 
+### Recursos visuales
+
+- Iconografia tecnica: Lucide React.
+- Iconos de salud incluidos en `public/assets/health-icons`: Health Icons.
+- Referencias visuales abiertas consultadas: Bioicons, Health Icons y NIH BioArt.
+- Atlas de equipos: asset local compartido con BioMedTools MX Core.
+
 ### Seguridad de rutas internas
 
 La ruta `/about` esta protegida con HTTP Basic Auth en `proxy.ts`.
