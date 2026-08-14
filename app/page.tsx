@@ -1,9 +1,11 @@
 import {
   ArrowRight,
   BarChart3,
+  BookOpenCheck,
   Boxes,
   BrainCircuit,
   ClipboardList,
+  FileText,
   FlaskConical,
   ShieldCheck,
   Target,
@@ -61,6 +63,33 @@ export default async function Home({ searchParams }: HomeProps) {
     "Accion",
     "Pregunta contextual",
     "Resultado final",
+  ];
+
+  const routeCards = [
+    {
+      label: "Quiz",
+      title: "Repaso de monitoreo",
+      href: `${QUIZ_ARENA_URL}/quiz/monitoreo-signos-vitales?mode=study&difficulty=intermediate`,
+      icon: BookOpenCheck,
+    },
+    {
+      label: "3D Lab",
+      title: "Monitor multiparametrico",
+      href: `${BIOMED_3D_LAB_URL}?equipment=patient-monitor&caseCategory=monitor-sin-spo2`,
+      icon: Boxes,
+    },
+    {
+      label: "Caso",
+      title: "Monitor sin lectura de SpO2",
+      href: "/cases/monitor-sin-spo2",
+      icon: BrainCircuit,
+    },
+    {
+      label: "Reporte",
+      title: "Evidencia correctiva",
+      href: `${REPORT_BUILDER_URL}/builder/corrective?activity=case&caseId=monitor-sin-spo2&equipment=Monitor%20multiparametrico`,
+      icon: FileText,
+    },
   ];
 
   return (
@@ -226,6 +255,48 @@ export default async function Home({ searchParams }: HomeProps) {
                 ))}
               </div>
             </aside>
+          </div>
+        </section>
+
+        <section className="mt-6 overflow-hidden rounded-lg border border-cyan-100 bg-white shadow-sm">
+          <div className="grid gap-0 lg:grid-cols-[0.78fr_1.22fr]">
+            <div className="bg-blue-950 p-5 text-white md:p-6">
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cyan-100">
+                <Target className="h-4 w-4" aria-hidden="true" />
+                Ruta diagnostica recomendada
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold leading-tight">
+                Antes de decidir la causa, ubica equipo y evidencia.
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-blue-100">
+                Esta ruta conecta el razonamiento del caso con repaso previo,
+                exploracion 3D y documentacion final.
+              </p>
+            </div>
+            <div className="grid gap-3 p-4 md:grid-cols-2 md:p-5 xl:grid-cols-4">
+              {routeCards.map((item, index) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="group rounded-lg border border-slate-200 bg-slate-50 p-4 transition hover:border-cyan-200 hover:bg-cyan-50"
+                >
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-cyan-700 text-sm font-semibold text-white">
+                    {index + 1}
+                  </span>
+                  <p className="mt-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-cyan-700">
+                    <item.icon className="h-4 w-4" aria-hidden="true" />
+                    {item.label}
+                  </p>
+                  <h3 className="mt-2 text-sm font-semibold leading-5 text-slate-950">
+                    {item.title}
+                  </h3>
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-cyan-700">
+                    Abrir
+                    <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 

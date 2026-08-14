@@ -65,6 +65,7 @@ types/
 
 La raiz acepta `?category=<categoria>` desde Quiz Arena y redirige al caso recomendado.
 La cabecera incluye una franja de ecosistema para cambiar entre Core, Quiz Arena, 3D Lab, Case Simulator y Report Builder.
+La portada muestra una ruta diagnostica recomendada para Monitoreo SpO2: repaso, 3D Lab, caso y reporte.
 
 Ejemplos:
 
