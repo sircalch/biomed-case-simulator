@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   BarChart3,
+  Boxes,
   BrainCircuit,
   ClipboardList,
   FlaskConical,
@@ -26,6 +27,9 @@ const QUIZ_ARENA_URL =
 const REPORT_BUILDER_URL =
   process.env.NEXT_PUBLIC_REPORT_BUILDER_URL ??
   "https://clinical-report-builder.vercel.app";
+const BIOMED_3D_LAB_URL =
+  process.env.NEXT_PUBLIC_BIOMED_3D_LAB_URL ??
+  "https://biomed-3d-engineering-lab.vercel.app";
 
 export default async function Home({ searchParams }: HomeProps) {
   const params = await searchParams;
@@ -44,11 +48,12 @@ export default async function Home({ searchParams }: HomeProps) {
   const metrics = [
     { label: "Casos", value: scenarios.length, icon: ClipboardList },
     { label: "Tiempo total", value: `${totalMinutes} min`, icon: Timer },
-    { label: "Pasos", value: "7", icon: Target },
+    { label: "Pasos", value: "8", icon: Target },
     { label: "Salida", value: "Reporte", icon: ShieldCheck },
   ];
 
   const flow = [
+    "Reconocimiento 3D del equipo",
     "Reporte inicial",
     "Pistas tecnicas",
     "Causa probable",
@@ -100,6 +105,13 @@ export default async function Home({ searchParams }: HomeProps) {
                   className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
                 >
                   Repasar antes del caso
+                </a>
+                <a
+                  href={`${BIOMED_3D_LAB_URL}?equipment=patient-monitor&caseCategory=monitor-sin-spo2`}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-semibold text-cyan-900 transition hover:border-cyan-300 hover:bg-cyan-100"
+                >
+                  Ver equipo 3D
+                  <Boxes className="h-4 w-4" aria-hidden="true" />
                 </a>
               </div>
 
@@ -160,6 +172,12 @@ export default async function Home({ searchParams }: HomeProps) {
                   >
                     Abrir caso sugerido
                   </Link>
+                  <a
+                    href={`${BIOMED_3D_LAB_URL}?equipment=patient-monitor&caseCategory=monitor-sin-spo2`}
+                    className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/20 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    Explorar equipo 3D
+                  </a>
                   <a
                     href={`${REPORT_BUILDER_URL}/builder/corrective?activity=case&caseId=monitor-sin-spo2&equipment=Monitor%20multiparametrico`}
                     className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/20 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10"

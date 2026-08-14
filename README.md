@@ -42,15 +42,16 @@ types/
 
 ### Flujo del simulador
 
-1. Seleccionar caso.
-2. Revisar reporte inicial.
-3. Analizar pistas.
-4. Elegir causa probable.
-5. Elegir herramienta.
-6. Elegir accion.
-7. Responder pregunta contextual.
-8. Revisar resultado final con puntaje y feedback.
-9. Exportar evidencia JSON o registrar reporte tecnico.
+1. Explorar el equipo relacionado en BioMed 3D Engineering Lab cuando aplique.
+2. Seleccionar caso.
+3. Revisar reporte inicial.
+4. Analizar pistas.
+5. Elegir causa probable.
+6. Elegir herramienta.
+7. Elegir accion.
+8. Responder pregunta contextual.
+9. Revisar resultado final con puntaje y feedback.
+10. Exportar evidencia JSON o registrar reporte tecnico.
 
 ### Casos incluidos
 
