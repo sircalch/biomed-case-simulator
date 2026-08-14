@@ -64,6 +64,7 @@ types/
 ### Integracion BioMedTools MX Core
 
 La raiz acepta `?category=<categoria>` desde Quiz Arena y redirige al caso recomendado.
+La cabecera incluye una franja de ecosistema para cambiar entre Core, Quiz Arena, 3D Lab, Case Simulator y Report Builder.
 
 Ejemplos:
 
